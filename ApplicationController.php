@@ -149,8 +149,8 @@ class ApplicationController extends BaseController
             return $this->render('index');
         }
 
-        $title = $this->request->post['title'] ?? '';
-        $text = $this->request->post['text'] ?? '';
+        $title = htmlspecialchars($this->request->post['title'], ENT_QUOTES) ?? '';
+        $text = htmlspecialchars($this->request->post['text'], ENT_QUOTES) ?? '';
 
         if (empty($title) || empty($text)) {
             $this->setAlert('Введите данные поста');
@@ -180,8 +180,8 @@ class ApplicationController extends BaseController
             return $this->render('index');
         }
 
-        $title = $this->request->post['title'] ?? '';
-        $text = $this->request->post['text'] ?? '';
+        $title = htmlspecialchars($this->request->post['title'], ENT_QUOTES) ?? '';
+        $text = htmlspecialchars($this->request->post['text'], ENT_QUOTES) ?? '';
 
         if (empty($title) || empty($text)) {
             return $this->render('index');
