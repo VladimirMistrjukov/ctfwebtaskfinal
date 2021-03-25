@@ -97,8 +97,8 @@ class ApplicationController extends BaseController
             return $this->render('index');
         }
 
-        $login = $this->request->post['login'] ?? '';
-        $password = $this->request->post['password'] ?? '';
+        $login = htmlspecialchars($this->request->post['login'], ENT_QUOTES) ?? '';
+        $password = htmlspecialchars($this->request->post['password'], ENT_QUOTES) ?? '';
 
         if (!$this->authorization->authorizeUser($login, $password)) {
             $this->setAlert('Такой пользователь не найден');
@@ -126,8 +126,8 @@ class ApplicationController extends BaseController
             return $this->render('index');
         }
 
-        $login = $this->request->post['login'] ?? '';
-        $password = $this->request->post['password'] ?? '';
+        $login = htmlspecialchars($this->request->post['login'], ENT_QUOTES) ?? '';
+        $password = htmlspecialchars($this->request->post['password'], ENT_QUOTES) ?? '';
 
         if (empty($login) || empty($password)) {
             $this->setAlert('Введите логин');
