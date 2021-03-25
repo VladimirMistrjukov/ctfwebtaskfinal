@@ -149,8 +149,8 @@ class ApplicationController extends BaseController
             return $this->render('index');
         }
 
-        $title = htmlspecialchars($this->request->post['title'], ENT_QUOTES) ?? '';
-        $text = htmlspecialchars($this->request->post['text'], ENT_QUOTES) ?? '';
+        $title = $this->db->escapeValue(htmlspecialchars($this->request->post['title'], ENT_QUOTES) ?? '');
+        $text = $this->db->escapeValue(htmlspecialchars($this->request->post['text'], ENT_QUOTES) ?? '');
 
         if (empty($title) || empty($text)) {
             $this->setAlert('Введите данные поста');
@@ -180,8 +180,8 @@ class ApplicationController extends BaseController
             return $this->render('index');
         }
 
-        $title = htmlspecialchars($this->request->post['title'], ENT_QUOTES) ?? '';
-        $text = htmlspecialchars($this->request->post['text'], ENT_QUOTES) ?? '';
+        $title = $this->db->escapeValue(htmlspecialchars($this->request->post['title'], ENT_QUOTES) ?? '');
+        $text = $this->db->escapeValue(htmlspecialchars($this->request->post['text'], ENT_QUOTES) ?? '');
 
         if (empty($title) || empty($text)) {
             return $this->render('index');
