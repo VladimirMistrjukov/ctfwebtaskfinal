@@ -163,10 +163,18 @@ class ApplicationController extends BaseController
 
     private function deletePost()
     {
+        if (!$this->authorization->isAuthorized()) {
+            $this->setAlert('Вы не авторизованы');
+            return $this->render('index');
+        }
+
         $postId = $this->request->get['post_id'];
+        if(!is_numeric($postId)){
+            return $this->redirect('index');
+        }
         $post = $this->posts->getPostById($postId);
 
-        if ($this->authorization->isAuthorized() && $post['user_id'] == $this->authorization->getCurrentUserId()) {
+        if ($post['user_id'] == $this->authorization->getCurrentUserId()) {
             $this->posts->deletePost($postId);
         }
         return $this->redirect('index');
@@ -174,13 +182,17 @@ class ApplicationController extends BaseController
 
     private function editPost()
     {
-        $postId = $this->request->get['post_id'];
-        $this->data['post'] = $this->posts->getPostById($postId);
-
         if (!$this->authorization->isAuthorized()) {
             $this->setAlert('Вы не авторизованы');
             return $this->render('index');
         }
+
+        $postId = $this->request->get['post_id'];
+        if(!is_numeric($postId)){
+            return $this->redirect('index');
+        }
+
+        $this->data['post'] = $this->posts->getPostById($postId);
 
         if (empty($this->data['post'])) {
             $this->setAlert('Данного поста не существует');
