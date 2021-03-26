@@ -177,19 +177,26 @@ class ApplicationController extends BaseController
         $postId = $this->request->get['post_id'];
         $this->data['post'] = $this->posts->getPostById($postId);
 
+        if (!$this->authorization->isAuthorized()) {
+            $this->setAlert('Вы не авторизованы');
+            return $this->render('index');
+        }
+
         if (empty($this->data['post'])) {
             $this->setAlert('Данного поста не существует');
             return $this->render('index');
         }
 
-        $title = $this->db->escapeValue(htmlspecialchars($this->request->post['title'], ENT_QUOTES) ?? '');
-        $text = $this->db->escapeValue(htmlspecialchars($this->request->post['text'], ENT_QUOTES) ?? '');
+        if ($this->data['post']['user_id'] == $this->authorization->getCurrentUserId()) {
+            $title = $this->db->escapeValue(htmlspecialchars($this->request->post['title'], ENT_QUOTES) ?? '');
+            $text = $this->db->escapeValue(htmlspecialchars($this->request->post['text'], ENT_QUOTES) ?? '');
 
-        if (empty($title) || empty($text)) {
-            return $this->render('index');
+            if (empty($title) || empty($text)) {
+                return $this->render('index');
+            }
+
+            $this->posts->updatePost($postId, $title, $text);
         }
-
-        $this->posts->updatePost($postId, $title, $text);
         return $this->redirect('index');
     }
 
