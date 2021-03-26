@@ -166,7 +166,9 @@ class ApplicationController extends BaseController
         $postId = $this->request->get['post_id'];
         $post = $this->posts->getPostById($postId);
 
-        $this->posts->deletePost($postId);
+        if ($this->authorization->isAuthorized() && $post['user_id'] == $this->authorization->getCurrentUserId()) {
+            $this->posts->deletePost($postId);
+        }
         return $this->redirect('index');
     }
 
